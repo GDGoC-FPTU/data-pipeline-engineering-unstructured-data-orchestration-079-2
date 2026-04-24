@@ -11,26 +11,27 @@ def clean_pdf_text(raw_text: str) -> str:
     cleaned = re.sub(r'FOOTER_PAGE_\d+', '', cleaned)
     return cleaned.strip()
 def process_pdf_data(raw_json: dict) -> dict:
-    content = raw_json.get("extractedText", "")
+    content = raw_json.get("extractedText", "") or ""
     content = clean_pdf_text(content)
     return {
         "document_id": raw_json.get("docId"),
-        "source_type": "pdf",
-        "author": raw_json.get("author"),
-        "category": raw_json.get("category"),
+        "source_type": "PDF",
+        "author": raw_json.get("author") or "",
+        "category": raw_json.get("docCategory") or raw_json.get("category") or "",
         "content": content,
-        "timestamp": raw_json.get("timestamp"),
+        "timestamp": raw_json.get("createdAt") or raw_json.get("timestamp") or "",
     }
 
 def process_video_data(raw_json: dict) -> dict:
-    # TODO: Map dữ liệu thô từ Video sang định dạng chuẩn (giống PDF)
-    # Lưu ý các key của Video: video_id, creator_name, transcript, category, published_timestamp
-     return {
+    transcript = raw_json.get("transcript", "") or ""
+    transcript = transcript.strip()
+
+    return {
         "document_id": raw_json.get("video_id"),
-        "source_type": "video",
-        "author": raw_json.get("creator_name"),
-        "category": raw_json.get("category"),
-        "content": raw_json.get("transcript"),
-        "timestamp": raw_json.get("published_timestamp"),
+        "source_type": "Video",
+        "author": raw_json.get("creator_name") or "",
+        "category": raw_json.get("category") or "",
+        "content": transcript,
+        "timestamp": raw_json.get("published_timestamp") or "",
     }
 
