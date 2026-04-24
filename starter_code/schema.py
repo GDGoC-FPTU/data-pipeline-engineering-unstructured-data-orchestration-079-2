@@ -10,4 +10,11 @@ class UnifiedDocument(BaseModel):
     TODO: Khai báo các trường với kiểu dữ liệu str ở dưới.
     """
     # Khai báo các trường ở đây...
-    pass
+    document_id: str = Field(...)
+    source_type: str = Field(...)
+    author: str = Field(...)
+    category: str = Field(...)
+    content: str = Field(...)
+    timestamp: str = Field(...)
+
+    
